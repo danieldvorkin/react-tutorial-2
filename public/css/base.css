@@ -64,11 +64,21 @@ ul {
   background:#eee;
 }
 
+.search-bar {
+  width:400px !important;
+}
+
 
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
   #content {
     width:90%;
+  }
+  .submit-btn {
+    width:100%;
+  }
+  .search-bar {
+    text-align:center;
   }
 }
