@@ -1,14 +1,21 @@
 var NavBarForm = React.createClass({
+  getInitialState: function(){
+    return { query: '' };
+  },
+  handleQueryChange: function(e){
+    this.setState({query: e.target.value});
+  },
   handleSubmit: function(e){
     e.preventDefault();
-    console.log(this);
-    this.props.onClick()
+
+    this.props.onClick({query: this.state.query.toString()})
+    this.setState({query: ''})
   },
   render: function(){
     return (
       <form className="navBarForm navbar-form navbar-left" onSubmit={this.handleSubmit}>
         <div className="form-group">
-          <input type="text" className="form-control search-bar" placeholder="Search" />
+          <input type="text" className="form-control search-bar" placeholder="Search" value={this.state.query} onChange={this.handleQueryChange}/>
         </div>
         <button type="submit" className="btn btn-default submit-btn">Submit</button>
       </form>
@@ -34,7 +41,7 @@ var NavBarBrand = React.createClass({
 
 var NavBar = React.createClass({
   searchSubmit: function(){
-    console.log("Search Query: ");
+    this.props.onClick();
   },
   render: function(){
     return (
@@ -52,7 +59,21 @@ var NavBar = React.createClass({
   }
 });
 
+var FilterableProductTable = React.createClass({
+  searchSubmit: function(){
+    console.log("Oh Shiiiitt")
+  },
+  render: function(){
+    return (
+      <div className="filterableProductTable">
+        <NavBar onClick={this.searchSubmit}/>
+        <h1>Hello World!</h1>
+      </div>
+    )
+  }
+});
+
 ReactDOM.render(
-  <NavBar />,
-  document.getElementById('navbar')
+  <FilterableProductTable/>,
+  document.getElementById('content')
 )
