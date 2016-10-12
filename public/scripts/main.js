@@ -1,3 +1,28 @@
+var ProductCategoryRow = React.createClass({
+  render: function(){
+    return (
+      <div className="productCategoryRow">
+        {{this.props.category}}
+      </div>
+    )
+  }
+});
+
+var ProductTable = React.createClass({
+  render: function(){
+    var categories = this.props.products.map(function(product){
+      return (
+        <ProductCategoryRow category={product.category}/>
+      )
+    });
+    return (
+      <div className="productTable">
+       {categories}
+      </div>
+    )
+  }
+});
+
 var NavBarForm = React.createClass({
   getInitialState: function(){
     return { query: '' };
@@ -67,13 +92,22 @@ var FilterableProductTable = React.createClass({
     return (
       <div className="filterableProductTable">
         <NavBar onClick={this.searchSubmit}/>
-        <h1>Hello World!</h1>
+        <ProductTable products={this.props.products}/>
       </div>
     )
   }
 });
 
+var PRODUCTS = [
+  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+];
+
 ReactDOM.render(
-  <FilterableProductTable/>,
+  <FilterableProductTable products={PRODUCTS}/>,
   document.getElementById('content')
 )
