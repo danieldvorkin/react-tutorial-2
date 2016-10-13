@@ -2,8 +2,10 @@
 var ProductItem = React.createClass({
   render: function(){
     return (
-      <div className="product">
-        {this.props.product.name}
+      <div className="productItem">
+        <div className="col-lg-4">
+          {this.props.product.name}
+        </div>
       </div>
     )
   }
@@ -21,12 +23,14 @@ var ProductCategoryRow = React.createClass({
     var category = this.props.category
     return (
       <div className="productCategoryRow">
-        <h1>{this.props.category}</h1>
-        {products.map((product) => {
-          if(product.category == category && product.name.includes(this.props.query)){
-            return <ProductItem product={product} key={product.id} />  
-          }
-        })}
+        <h1>{category}</h1>
+        <div className="row">
+          {products.map((product) => {
+            if(product.category == category && product.name.includes(this.props.query)){
+              return <ProductItem product={product} key={product.id} />  
+            }
+          })}
+        </div>
       </div>
     )
   }
@@ -63,7 +67,7 @@ var AddProductForm = React.createClass({
   },
   render: function(){
     return (
-      <form className="addProduct form-inline" onSubmit={this.handleSubmit}>
+      <form className="addProduct navbar-form navbar-right" onSubmit={this.handleSubmit}>
         <div className="form-group">
           <input type="text" className="form-control" placeholder="Product Name" onChange={this.handleNameChange} value={this.state.name} />
           <input type="text" className="form-control" placeholder="Product Category" onChange={this.handleCategoryChange} value={this.state.category} />
@@ -77,9 +81,6 @@ var AddProductForm = React.createClass({
 
 // Parent Component: FilterableProductTable
 var ProductTable = React.createClass({
-  handleSubmit: function(data){
-    this.props.addProduct(data);
-  },
   render: function(){
     var categories = this.props.products.map((product) =>
       product.category
@@ -87,7 +88,6 @@ var ProductTable = React.createClass({
 
     return (
       <div className="productTable">
-        <AddProductForm addProduct={this.handleSubmit}/><br/>
         {categories.map((category, index) =>
           <ProductCategoryRow category={category} key={index} products={this.props.products} checked={this.props.checked} query={this.props.query} />
         )}
@@ -144,6 +144,9 @@ var NavBar = React.createClass({
   showInStock: function(){
     this.props.onCheckboxClick();
   },
+  handleSubmit: function(data){
+    this.props.addProduct(data);
+  },
   render: function(){
     return (
       <div className="navBar">
@@ -152,6 +155,7 @@ var NavBar = React.createClass({
             <NavBarBrand/>       
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <NavBarForm onClick={this.searchSubmit} onCheckbox={this.showInStock} checked={this.props.checked} />
+              <AddProductForm addProduct={this.handleSubmit}/><br/>
             </div>
           </div>
         </nav>
@@ -208,8 +212,8 @@ var FilterableProductTable = React.createClass({
   render: function(){
     return (
       <div className="filterableProductTable">
-        <NavBar onClick={this.searchSubmit} onCheckboxClick={this.showInStock} checked={this.state.checked} />
-        <ProductTable products={this.state.data} checked={this.state.checked} query={this.state.query} addProduct={this.addProduct} />
+        <NavBar onClick={this.searchSubmit} onCheckboxClick={this.showInStock} checked={this.state.checked} addProduct={this.addProduct}/>
+        <ProductTable products={this.state.data} checked={this.state.checked} query={this.state.query} />
       </div>
     )
   }
