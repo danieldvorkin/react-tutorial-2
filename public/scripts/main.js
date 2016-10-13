@@ -32,6 +32,21 @@ var ProductCategoryRow = React.createClass({
   }
 });
 
+var AddProduct = React.createClass({
+  render: function(){
+    return (
+      <form className="addProduct form-inline">
+        <div className="form-group">
+          <input type="text" className="form-control" placeholder="Product Name" />
+          <input type="text" className="form-control" placeholder="Product Category" />
+          <input type="checkbox" /> In Stock?
+        </div>
+        <input type="submit" className="btn btn-default" />
+      </form>
+    )
+  }
+})
+
 // Parent Component: FilterableProductTable
 var ProductTable = React.createClass({
   render: function(){
@@ -41,6 +56,7 @@ var ProductTable = React.createClass({
 
     return (
       <div className="productTable">
+        <AddProduct /><br/>
         {categories.map((category, index) =>
           <ProductCategoryRow category={category} key={index} products={this.props.products} checked={this.props.checked} query={this.props.query} />
         )}
@@ -135,18 +151,10 @@ var FilterableProductTable = React.createClass({
     setInterval(this.loadData, this.props.poll);
   },
   searchSubmit: function(query){
-    this.setState({
-      query: query
-    }, function(){
-      console.log("Query State: ", this.state.query)
-    });
+    this.setState({ query: query });
   },
   showInStock: function(){
-    this.setState({
-      checked: !this.state.checked
-    }, function(){
-
-    });
+    this.setState({ checked: !this.state.checked });
   },
   render: function(){
     return (
