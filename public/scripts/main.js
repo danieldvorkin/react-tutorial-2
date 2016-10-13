@@ -32,14 +32,42 @@ var ProductCategoryRow = React.createClass({
   }
 });
 
-var AddProduct = React.createClass({
+var AddProductForm = React.createClass({
+  getInitialState: function(){
+    return { name: '', category: '', stock: ''};
+  },
+  handleNameChange: function(e){
+    this.setState({name: e.target.value});
+  },
+  handleCategoryChange: function(e) {
+    this.setState({category: e.target.value});
+  },
+  handleStockChange: function(e){
+    this.setState({stock: e.target.checked})
+  },
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var name = this.state.name.trim();
+    var category = this.state.category.trim();
+    var stock = this.state.stock;
+
+    if(!name || !category) {
+      return;
+    }
+    if(!stock){
+      stock = false;
+    }
+
+    this.props.addProduct({name: name, category: category, stock: stock});
+    this.setState({name: '', category: '', stock: ''})
+  },
   render: function(){
     return (
-      <form className="addProduct form-inline">
+      <form className="addProduct form-inline" onSubmit={this.handleSubmit}>
         <div className="form-group">
-          <input type="text" className="form-control" placeholder="Product Name" />
-          <input type="text" className="form-control" placeholder="Product Category" />
-          <input type="checkbox" /> In Stock?
+          <input type="text" className="form-control" placeholder="Product Name" onChange={this.handleNameChange} value={this.state.name} />
+          <input type="text" className="form-control" placeholder="Product Category" onChange={this.handleCategoryChange} value={this.state.category} />
+          <input type="checkbox" onChange={this.handleStockChange} checked={this.state.stock} /> In Stock?
         </div>
         <input type="submit" className="btn btn-default" />
       </form>
@@ -49,6 +77,9 @@ var AddProduct = React.createClass({
 
 // Parent Component: FilterableProductTable
 var ProductTable = React.createClass({
+  handleSubmit: function(data){
+    this.props.addProduct(data);
+  },
   render: function(){
     var categories = this.props.products.map((product) =>
       product.category
@@ -56,7 +87,7 @@ var ProductTable = React.createClass({
 
     return (
       <div className="productTable">
-        <AddProduct /><br/>
+        <AddProductForm addProduct={this.handleSubmit}/><br/>
         {categories.map((category, index) =>
           <ProductCategoryRow category={category} key={index} products={this.props.products} checked={this.props.checked} query={this.props.query} />
         )}
@@ -156,11 +187,29 @@ var FilterableProductTable = React.createClass({
   showInStock: function(){
     this.setState({ checked: !this.state.checked });
   },
+  addProduct: function(newProduct){
+    var products = this.state.data;
+    newProduct.id = this.state.data.length + 1;
+    var newData = products.concat([newProduct])
+    this.setState({data: newData});
+
+    $.ajax({
+      url: this.props.url,
+      type: 'POST',
+      data: newProduct,
+      success: function(data){
+        this.setState({data: data})
+      }.bind(this),
+      error: function(xhr, status, err){
+        console.log(xhr, status, err.toString());
+      }.bind(this)
+    })
+  },
   render: function(){
     return (
       <div className="filterableProductTable">
         <NavBar onClick={this.searchSubmit} onCheckboxClick={this.showInStock} checked={this.state.checked} />
-        <ProductTable products={this.state.data} checked={this.state.checked} query={this.state.query} />
+        <ProductTable products={this.state.data} checked={this.state.checked} query={this.state.query} addProduct={this.addProduct} />
       </div>
     )
   }
