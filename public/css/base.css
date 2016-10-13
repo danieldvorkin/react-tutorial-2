@@ -68,6 +68,14 @@ ul {
   width:400px !important;
 }
 
+.productTable {
+  margin-top: 10%;
+}
+
+#inStock {
+  margin-left:10px;
+}
+
 
 @media only screen
 and (min-device-width : 320px)
