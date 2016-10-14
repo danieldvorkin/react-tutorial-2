@@ -39,14 +39,20 @@
       "id": 6,
       "category": "Electronics",
       "price": "$199.99",
-      "stocked": true,
+      "stocked": "true",
       "name": "Nexus 7"
     },
     {
       "id": 1476398751558,
       "name": "iPhone 6",
       "category": "Electronics",
-      "stock": "false"
+      "stock": false
+    },
+    {
+      "name": "Product 1",
+      "category": "Category 1",
+      "stock": true,
+      "id": 8
     }
   ]
 }

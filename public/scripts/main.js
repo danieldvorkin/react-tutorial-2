@@ -1,3 +1,37 @@
+var Button = ReactBootstrap.Button;
+var Modal = ReactBootstrap.Modal;
+
+var AddProductModal = React.createClass({
+  getInitialState() {
+    return { showModal: false };
+  },
+  close() {
+    this.setState({ showModal: false });
+  },
+  open() {
+    this.setState({ showModal: true });
+  },
+  addProduct: function(data){
+    this.props.addProduct(data)
+    this.close();
+  },
+  render() {
+    return (
+      <div>
+        <Button bsStyle="default" bsSize="small" onClick={this.open}> Add New Product </Button>
+        <Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add New Product</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AddProductForm addProduct={this.addProduct}/>
+          </Modal.Body>
+        </Modal>
+      </div>
+    );
+  }
+});
+
 var EditProduct = React.createClass({
   getInitialState: function(){
     return ({ name: this.props.product.name })
@@ -17,8 +51,6 @@ var EditProduct = React.createClass({
     )
   }
 });
-
-// Parent Component: ProductCategoryRow <- ProductTable <- FilterableProductTable
 var ProductItem = React.createClass({
   getInitialState: function(){
     return { editProduct: false, display: 'inline-flex', name: this.props.product.name }
@@ -47,8 +79,6 @@ var ProductItem = React.createClass({
     )
   }
 });
-
-// Parent Component: ProductTable <- FilterableProductTable
 var ProductCategoryRow = React.createClass({
   deleteRequest: function(id){
     this.props.handleDelete(id)
@@ -78,7 +108,6 @@ var ProductCategoryRow = React.createClass({
     )
   }
 });
-
 var AddProductForm = React.createClass({
   getInitialState: function(){
     return { name: '', category: '', stock: ''};
@@ -90,6 +119,7 @@ var AddProductForm = React.createClass({
     this.setState({category: e.target.value});
   },
   handleStockChange: function(e){
+    debugger;
     this.setState({stock: e.target.checked})
   },
   handleSubmit: function(e) {
@@ -110,10 +140,12 @@ var AddProductForm = React.createClass({
   },
   render: function(){
     return (
-      <form className="addProduct navbar-form navbar-right" onSubmit={this.handleSubmit}>
+      <form className="addProduct" onSubmit={this.handleSubmit}>
         <div className="form-group">
           <input type="text" className="form-control" placeholder="Product Name" onChange={this.handleNameChange} value={this.state.name} />
+          <br/>
           <input type="text" className="form-control" placeholder="Product Category" onChange={this.handleCategoryChange} value={this.state.category} />
+          <br/>
           <input type="checkbox" onChange={this.handleStockChange} checked={this.state.stock} /> In Stock?
         </div>
         <input type="submit" className="btn btn-default" />
@@ -121,7 +153,6 @@ var AddProductForm = React.createClass({
     )
   }
 })
-// Parent Component: FilterableProductTable
 var ProductTable = React.createClass({
   handleDelete: function(id){
     this.props.deleteProduct(id)
@@ -151,7 +182,6 @@ var ProductTable = React.createClass({
     )
   }
 });
-// Parent Component: Navbar <- FilterableProductTable
 var NavBarForm = React.createClass({
   getInitialState: function(){
     return { query: '', checked: false };
@@ -173,7 +203,6 @@ var NavBarForm = React.createClass({
     )
   }
 });
-// Parent Component: Navbar <- FilterableProductTable
 var NavBarBrand = React.createClass({
   render: function(){
     return (
@@ -189,7 +218,6 @@ var NavBarBrand = React.createClass({
     )
   }
 });
-// Parent Component: FilterableProductTable
 var NavBar = React.createClass({
   searchSubmit: function(query){
     this.props.onClick(query);
@@ -208,7 +236,7 @@ var NavBar = React.createClass({
             <NavBarBrand/>       
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <NavBarForm onClick={this.searchSubmit} onCheckbox={this.showInStock} checked={this.props.checked} />
-              <AddProductForm addProduct={this.handleSubmit}/><br/>
+              <AddProductModal addProduct={this.handleSubmit} />
             </div>
           </div>
         </nav>
@@ -216,7 +244,6 @@ var NavBar = React.createClass({
     )
   }
 });
-
 var FilterableProductTable = React.createClass({
   loadData: function(){
     $.ajax ({

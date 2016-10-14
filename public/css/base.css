@@ -75,7 +75,12 @@ ul {
 #inStock {
   margin-left:10px;
 }
-
+.btn {
+  margin-top: 10px !important;
+}
+.addProduct {
+  text-align:center;
+}
 
 @media only screen
 and (min-device-width : 320px)
