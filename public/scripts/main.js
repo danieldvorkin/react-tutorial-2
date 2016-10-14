@@ -69,7 +69,7 @@ var ProductCategoryRow = React.createClass({
         <h1>{category}</h1>
         <div className="row">
           {products.map((product) => {
-            if(product.category == category && product.name.includes(this.props.query)){
+            if(product.category == category && product.name.toLowerCase().includes(this.props.query.toLowerCase())){
               return <ProductItem product={product} key={product.id} handleDelete={this.deleteRequest} editProduct={this.editProduct} />  
             }
           })}
