@@ -1,10 +1,47 @@
+var EditProduct = React.createClass({
+  getInitialState: function(){
+    return ({ name: this.props.product.name })
+  },
+  handleChange: function(e){
+    this.setState({ name: e.target.value })
+  },
+  editProduct: function(){
+    this.props.editProduct({name: this.state.name, display: "inline-flex", id: this.props.product.id })
+  },
+  render: function(){
+    return (
+      <div className="editProduct">
+        <input type="text" value={this.state.name} key={this.props.product.id} className="edit-form" onChange={this.handleChange} />
+        <input type="submit" onClick={this.editProduct} />
+      </div>
+    )
+  }
+});
+
 // Parent Component: ProductCategoryRow <- ProductTable <- FilterableProductTable
 var ProductItem = React.createClass({
+  getInitialState: function(){
+    return { editProduct: false, display: 'inline-flex', name: this.props.product.name }
+  },
+  handleEditReq: function(){
+    this.setState({ editProduct: true, display: 'none'})
+  },
+  handleDeleteReq: function(e){
+    this.props.handleDelete({id: e.target.id})
+  },
+  sendEditReq: function(obj){
+    this.setState({ display: obj.display, editProduct: false, name: obj.name })
+    this.props.editProduct({ id: obj.id, name: obj.name })
+  },
   render: function(){
+    var visibility = { display: this.state.display }
     return (
       <div className="productItem">
         <div className="col-lg-4">
-          {this.props.product.name}
+          {!this.state.editProduct ? this.state.name + " - ": null}
+          { this.state.editProduct ? <EditProduct product={this.props.product} editProduct={this.sendEditReq}/> : null }
+          <a href="#" onClick={this.handleEditReq} id={this.props.product.id} style={visibility}>EDIT </a>
+          <a href="#" onClick={this.handleDeleteReq} id={this.props.product.id} style={visibility}>&nbsp;DELETE</a>
         </div>
       </div>
     )
@@ -13,6 +50,12 @@ var ProductItem = React.createClass({
 
 // Parent Component: ProductTable <- FilterableProductTable
 var ProductCategoryRow = React.createClass({
+  deleteRequest: function(id){
+    this.props.handleDelete(id)
+  },
+  editProduct: function(obj){
+    this.props.editProduct(obj)
+  },
   render: function(){
     var products = this.props.products
     if(this.props.checked){
@@ -27,7 +70,7 @@ var ProductCategoryRow = React.createClass({
         <div className="row">
           {products.map((product) => {
             if(product.category == category && product.name.includes(this.props.query)){
-              return <ProductItem product={product} key={product.id} />  
+              return <ProductItem product={product} key={product.id} handleDelete={this.deleteRequest} editProduct={this.editProduct} />  
             }
           })}
         </div>
@@ -78,9 +121,14 @@ var AddProductForm = React.createClass({
     )
   }
 })
-
 // Parent Component: FilterableProductTable
 var ProductTable = React.createClass({
+  handleDelete: function(id){
+    this.props.deleteProduct(id)
+  },
+  editProduct: function(obj){
+    this.props.editProduct(obj);
+  },
   render: function(){
     var categories = this.props.products.map((product) =>
       product.category
@@ -89,13 +137,20 @@ var ProductTable = React.createClass({
     return (
       <div className="productTable">
         {categories.map((category, index) =>
-          <ProductCategoryRow category={category} key={index} products={this.props.products} checked={this.props.checked} query={this.props.query} />
+          <ProductCategoryRow 
+            category={category} 
+            key={index} 
+            products={this.props.products} 
+            checked={this.props.checked} 
+            query={this.props.query} 
+            handleDelete={this.handleDelete} 
+            editProduct={this.editProduct} 
+          />
         )}
       </div>
     )
   }
 });
-
 // Parent Component: Navbar <- FilterableProductTable
 var NavBarForm = React.createClass({
   getInitialState: function(){
@@ -118,7 +173,6 @@ var NavBarForm = React.createClass({
     )
   }
 });
-
 // Parent Component: Navbar <- FilterableProductTable
 var NavBarBrand = React.createClass({
   render: function(){
@@ -135,7 +189,6 @@ var NavBarBrand = React.createClass({
     )
   }
 });
-
 // Parent Component: FilterableProductTable
 var NavBar = React.createClass({
   searchSubmit: function(query){
@@ -207,13 +260,44 @@ var FilterableProductTable = React.createClass({
       error: function(xhr, status, err){
         console.log(xhr, status, err.toString());
       }.bind(this)
+    });
+  },
+  deleteProduct: function(product){
+    $.ajax({
+      url: this.props.url + "/" + product.id,
+      type: 'DELETE',
+      data: product,
+      success: function(data){
+        this.componentDidMount()
+      }.bind(this),
+      error: function(xhr, status, err){
+        console.log(xhr, status, err.toString())
+      }.bind(this)
+    });
+  },
+  editProduct: function(product){
+    var position = this.state.data.map(function(x) {return x.id; }).indexOf(product.id);
+    this.state.data[position].name = product.name
+    var data = this.state.data[position]
+
+    $.ajax({
+      url: this.props.url + "/" + product.id,
+      type: 'PATCH',
+      data: data,
+      success: function(data){
+        console.log(data)
+        this.componentDidMount()
+      }.bind(this),
+      error: function(xhr, status, err){
+        console.log(xhr, status, err.toString());
+      }.bind(this)
     })
   },
   render: function(){
     return (
       <div className="filterableProductTable">
         <NavBar onClick={this.searchSubmit} onCheckboxClick={this.showInStock} checked={this.state.checked} addProduct={this.addProduct}/>
-        <ProductTable products={this.state.data} checked={this.state.checked} query={this.state.query} />
+        <ProductTable products={this.state.data} checked={this.state.checked} query={this.state.query} deleteProduct={this.deleteProduct} editProduct={this.editProduct} />
       </div>
     )
   }
