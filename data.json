@@ -1,74 +1,76 @@
-[
+{
+  "data": [
     {
-        "id": 1,
-        "category": "Sporting Goods",
-        "price": "$49.99",
-        "stocked": true,
-        "name": "Football"
+      "id": 1,
+      "category": "Sporting Goods",
+      "price": "$49.99",
+      "stocked": true,
+      "name": "Football"
     },
     {
-        "id": 2,
-        "category": "Sporting Goods",
-        "price": "$9.99",
-        "stocked": true,
-        "name": "Baseball"
+      "id": 2,
+      "category": "Sporting Goods",
+      "price": "$9.99",
+      "stocked": true,
+      "name": "Baseball"
     },
     {
-        "id": 3,
-        "category": "Sporting Goods",
-        "price": "$29.99",
-        "stocked": false,
-        "name": "Basketball"
+      "id": 3,
+      "category": "Sporting Goods",
+      "price": "$29.99",
+      "stocked": false,
+      "name": "Basketball"
     },
     {
-        "id": 4,
-        "category": "Electronics",
-        "price": "$99.99",
-        "stocked": true,
-        "name": "iPod Touch"
+      "id": 4,
+      "category": "Electronics",
+      "price": "$99.99",
+      "stocked": true,
+      "name": "iPod Touch"
     },
     {
-        "id": 5,
-        "category": "Electronics",
-        "price": "$399.99",
-        "stocked": false,
-        "name": "iPhone 5"
+      "id": 5,
+      "category": "Electronics",
+      "price": "$399.99",
+      "stocked": false,
+      "name": "iPhone 5"
     },
     {
-        "id": 6,
-        "category": "Electronics",
-        "price": "$199.99",
-        "stocked": true,
-        "name": "Nexus 7"
+      "id": 6,
+      "category": "Electronics",
+      "price": "$199.99",
+      "stocked": true,
+      "name": "Nexus 7"
     },
     {
-        "id": 1476398740997,
-        "name": "dsfl;k",
-        "category": "sd;lfk",
-        "stock": "false"
+      "id": 1476398740997,
+      "name": "dsfl;k",
+      "category": "sd;lfk",
+      "stock": "false"
     },
     {
-        "id": 1476398751558,
-        "name": "iPhone 6",
-        "category": "Electronics",
-        "stock": "false"
+      "id": 1476398751558,
+      "name": "iPhone 6",
+      "category": "Electronics",
+      "stock": "false"
     },
     {
-        "id": 1476400272580,
-        "name": "Amanda's single lock of hair",
-        "category": "creepiness",
-        "stock": "false"
+      "id": 1476400272580,
+      "name": "Amanda's single lock of hair",
+      "category": "creepiness",
+      "stock": "false"
     },
     {
-        "id": 1476400806888,
-        "name": "dsfl;k",
-        "category": "sd;lfk",
-        "stock": "false"
+      "id": 1476400806888,
+      "name": "dsfl;k",
+      "category": "sd;lfk",
+      "stock": "false"
     },
     {
-        "id": 1476400813237,
-        "name": "dsflksdl;fk",
-        "category": "sd;lfksd;lfk",
-        "stock": "false"
+      "id": 1476400813237,
+      "name": "dsflksdl;fk",
+      "category": "sd;lfksd;lfk",
+      "stock": "false"
     }
-]
+  ]
+}

@@ -220,6 +220,6 @@ var FilterableProductTable = React.createClass({
 });
 
 ReactDOM.render(
-  <FilterableProductTable url="/api/data" poll={2000} />,
+  <FilterableProductTable url="/data" poll={2000} />,
   document.getElementById('content')
 )
